@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrightMind - EdTech App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(145deg, #e0f7fa, #fff9c4);
+      color: #1a1a1a;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: linear-gradient(90deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1000;
+      transition: background 0.3s ease;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    /* --- LOGO STYLES: Small, Glowing, Rectangular Closed Book with 'B' --- */
+    .logo-img {
+      width: 42px; /* Smaller width */
+      height: 46px; /* Smaller height */
+      /* Book Cover */
+      background: #1e3a8a; /* Deep blue cover */
+      border-radius: 4px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      transform: none; 
+      
+      color: white; /* Color for the 'B' on the cover */
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-weight: 900;
+      font-size: 20px; /* Smaller font size for 'B' */
+      
+      /* Glow and Border */
+      box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.4), /* Depth shadow */
+        0 0 10px rgba(255, 255, 255, 0.7), /* White glow shadow */
+        0 0 20px rgba(60, 150, 255, 0.3); /* Blue subtle outer glow */
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+      
+      border: 0.5px solid #ffffff; /* 0.5px Border */
+    }
+
+    /* Book Spine/Pages Edge - Light gray vertical strip */
+    .logo-img::before {
+        content: '';
+        position: absolute;
+        width: 15%; 
+        height: 100%; 
+        background: #b0bec5; /* Light gray for pages/spine */
+        top: 0;
+        left: 0; 
+        z-index: 1;
+        /* Subtle page texture */
+        background-image: linear-gradient(to bottom, transparent 90%, rgba(0,0,0,0.1) 100%);
+        background-size: 100% 10px;
+    }
+
+    /* Red bookmark ribbon detail */
+    .logo-img::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 15px;
+        background: #d32f2f; 
+        top: 0;
+        right: 12px; /* Adjusted to fit smaller width */
+        z-index: 2; 
+    }
+
+    .logo-img:hover { 
+      transform: scale(1.05) rotate(-3deg); 
+      box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(255, 255, 255, 0.9), /* Enhanced white glow on hover */
+        0 0 30px rgba(60, 150, 255, 0.6); /* Enhanced blue glow on hover */
+    }
+    /* --- END OF LOGO STYLES --- */
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .nav-links { list-style: none; display: flex; gap: 20px; margin: 0; }
+    .nav-links li a { color: white; text-decoration: none; font-weight: 600; font-size: 16px; transition: all 0.3s ease; }
+    .nav-links li a:hover { text-decoration: underline; color: #ffeb3b; transform: scale(1.1); }
+    .menu-toggle { display: none; font-size: 28px; cursor: pointer; }
+    @media (max-width: 768px) {
+      .nav-links { width: 100%; flex-direction: column; padding: 10px 0; gap: 10px; }
+      .nav-links.hidden { display: none; }
+      .menu-toggle { display: block; }
+    }
+    .container { padding: 20px; max-width: 1000px; margin: auto; display: flex; flex-direction: column; gap: 25px; }
+    .card, .notes-section, .prev-questions-section { background: linear-gradient(135deg, #ffffff, #e3f2fd); padding: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); transition: all 0.5s ease, transform 0.5s ease; border-left: 5px solid #1e3a8a; }
+    .card h2, .notes-section h3, .prev-questions-section h3 { margin-top: 0; }
+    .card:hover, .notes-section:hover, .prev-questions-section:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.2); }
+    .btn { padding: 12px 22px; background: linear-gradient(90deg, #1e3a8a, #2563eb); color: white; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.3s ease; margin-top: 12px; }
+    .btn:hover { background: linear-gradient(90deg, #3b82f6, #60a5fa); transform: scale(1.05); }
+    .lesson-list li { font-size: 16px; margin: 8px 0; transition: all 0.3s ease; }
+    #ai-section { background: linear-gradient(145deg, #fff3e0, #ffe0b2); padding: 25px; border-radius: 20px; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .promo { text-align: center; font-size: 24px; font-weight: 700; color: #1e3a8a; padding: 20px; background: linear-gradient(135deg, #e0f7fa, #b2ebf2); border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); transition: all 0.5s ease; }
+    .highlight-red { background: linear-gradient(135deg, #ffe5e5, #ffcccc); border-left: 5px solid #d32f2f; }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-container">
+    <div class="logo-img">B</div>
+    <div class="logo-text">BrightMind</div>
+  </div>
+  <ul class="nav-links hidden" id="navMenu">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#login">Login</a></li>
+    <li><a href="#faculty">Faculty</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="container" id="sections">
+  <div class="card" id="home">
+    <h2>Welcome to BrightMind</h2>
+    <p>Unlock Your Potential Today with BrightMind – Where Success Begins!</p>
+  </div>
+  <div class="card" id="login">
+    <h2>🔐 Login</h2>
+    <p>Select your role to continue:</p>
+    <button class="btn" onclick="loginStudent()">Student Login</button>
+    <button class="btn" onclick="loginParent()">Parent Login</button>
+  </div>
+  <div class="card" id="faculty">
+    <h2>👨‍🏫 Faculty</h2>
+    <p>Meet our experienced team of educators and tutors:</p>
+    <ul class="lesson-list">
+      <li>Dr. Sarah Johnson - Mathematics & Physics Expert</li>
+      <li>Prof. Michael Chen - Chemistry & Biology Specialist</li>
+      <li>Ms. Emily Parker - English & IELTS Instructor</li>
+      <li>Mr. David Williams - SAT & Test Prep Coordinator</li>
+    </ul>
+    <button class="btn" onclick="viewFaculty()">View All Faculty</button>
+  </div>
+  <div class="card" id="courses">
+    <h2>🎓 Study Levels</h2>
+    <ul class="lesson-list">
+      <li>O Level – Mathematics, Physics, English</li>
+      <li>A Level – Pure Math, Chemistry, Economics</li>
+      <li>SAT – Math & English Practice</li>
+      <li>IELTS – Speaking, Reading, Listening, Writing</li>
+    </ul>
+    <button class="btn" onclick="exploreCourses()">Explore All Courses</button>
+  </div>
+  <div class="notes-section" id="notes">
+    <h3>📝 Notes</h3>
+    <ul>
+      <li>Algebra formulas and shortcuts</li>
+      <li>Physics motion equations</li>
+      <li>English grammar rules</li>
+    </ul>
+    <button class="btn">View All Notes</button>
+  </div>
+  <div class="card highlight-red" id="quiz">
+    <h2>📝 Quiz of the Day</h2>
+    <p id="quizQuestion">Click below to get today's quiz question!</p>
+    <button class="btn" onclick="loadQuiz()">Load Quiz</button>
+  </div>
+  <div class="card highlight-red" id="mock-test">
+    <h2>🧪 Mock Tests</h2>
+    <p>Take full-length mock tests for A-Level, O-Level, SAT & IELTS and evaluate your performance.</p>
+    <button class="btn" onclick="startMockTest()">Start Mock Test</button>
+  </div>
+  <div class="prev-questions-section" id="prev-questions">
+    <h3>📚 Previous Questions</h3>
+    <ul>
+      <li>O Level Math Past Papers</li>
+      <li>A Level Physics Past Papers</li>
+      <li>SAT Practice Questions</li>
+      <li>IELTS Writing Samples</li>
+    </ul>
+    <button class="btn">View Previous Questions</button>
+  </div>
+  <div class="card" id="animations">
+    <h2>🎬 Interactive Animations</h2>
+    <p>Learn complex concepts through engaging visual animations and interactive demonstrations.</p>
+    <ul class="lesson-list">
+      <li>Mathematics - 3D Geometry & Graphing</li>
+      <li>Physics - Motion, Forces & Energy Simulations</li>
+      <li>Chemistry - Molecular Structures & Reactions</li>
+      <li>Biology - Cell Division & Body Systems</li>
+    </ul>
+    <button class="btn">Explore Animations</button>
+  </div>
+  <div class="card" id="progress">
+    <h2>📊 Learning Progress</h2>
+    <p id="progress">Your progress will appear here.</p>
+    <button class="btn" onclick="showProgress()">Show Progress</button>
+  </div>
+  <div class="card" id="pricing">
+    <h2>💰 Pricing Plans</h2>
+    <ul class="lesson-list">
+      <li><strong>Free Plan:</strong> Basic lessons, daily quiz</li>
+      <li><strong>Standard Plan – $9.99/month:</strong> All subjects + progress tracking</li>
+      <li><strong>Premium Plan – $19.99/month:</strong> AI tutor + mock tests + IELTS/SAT tools</li>
+    </ul>
+    <button class="btn">Choose Plan</button>
+  </div>
+  <div id="ai-section" class="card">
+    <h2>🤖 AI Study Assistant</h2>
+    <p>Your personal AI tutor for A Level, O Level, SAT & IELTS.</p>
+    <ul class="lesson-list">
+      <li>Ask any question from any subject instantly</li>
+      <li>Generate practice questions & explanations</li>
+      <li>IELTS speaking mock with AI scoring</li>
+      <li>SAT essay feedback & improvement</li>
+    </ul>
+    <button class="btn" onclick="openAISection()">Open AI Assistant</button>
+  </div>
+  <div class="card" id="contact">
+    <h2>📧 Contact Us</h2>
+    <p>Have questions? We're here to help! Reach out to our support team.</p>
+    <ul class="lesson-list">
+      <li>📧 Email: support@brightmind.edu</li>
+      <li>📱 Phone: +1 (555) 123-4567</li>
+      <li>🕘 Hours: Mon-Fri, 9 AM - 6 PM EST</li>
+      <li>📍 Address: 123 Education Street, Learning City, ED 12345</li>
+    </ul>
+    <button class="btn" onclick="sendMessage()">Send Message</button>
+  </div>
+</div>
+
+<script>
+  function toggleMenu() { 
+    var menu = document.getElementById('navMenu'); 
+    menu.classList.toggle('hidden');
+  }
+  function loginStudent() { alert("Redirecting to Student Login Page..."); }
+  function loginParent() { alert("Redirecting to Parent Login Page..."); }
+  function loadLesson() { alert("Today's Lesson: Algebra Basics – Solving Linear Equations"); }
+  function loadQuiz() { document.getElementById("quizQuestion").innerText = "What is the value of x in: 2x + 4 = 12?"; }
+  function showProgress() { document.getElementById("progress").innerText = "You have completed 40% of your weekly learning goals!"; }
+  function openAISection() { alert("Opening AI Study Assistant..."); }
+  function startMockTest() { alert('Starting mock test...'); }
+  function sendMessage() { alert("Opening contact form..."); }
+  function exploreCourses() { alert("Exploring all available courses..."); }
+  function viewFaculty() { alert("Loading faculty profiles..."); }
+</script>
+
+</body>
+</html>
